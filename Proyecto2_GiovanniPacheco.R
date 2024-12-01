@@ -68,30 +68,74 @@ data_ganado <- bind_rows(data_2022, data_2023)
 
 View(data_ganado)
 
-##Aplicación de minería de datos
-#Árboles de decisión
-
+##Minería de datos: Árboles de decisión
 #Instalación de los paquetes y librerías
-
 install.packages("rpart")
 install.packages("rpart.plot")
 
 library(rpart)
 library(rpart.plot)
 
-arbol1 <- rpart(Departamento ~
-                `Tipo de Carne`+
-                `Sexo (subclase)`+
-                Año,
-                data = data_ganado, method = "class")
+#Previamente se había identificado que el algoritmo no puede trabajar con encabezados con espacios, por lo que se modifican los nombres de las varibales categóricas
+colnames(data_ganado)[colnames(data_ganado)== "Tipo de Carne"] <- "TipodeCarne"
+colnames(data_ganado)[colnames(data_ganado)== "Sexo (subclase)"] <- "Sexo(subclase)"
+colnames(data_ganado)[colnames(data_ganado)== "Sexo(subclase)"] <- "SexoSubclase"
 
-# Ajustar los márgenes
-par(mar = c(5, 4, 4, 2) + 0.1)
+#Desarrollo del árbol de decisión basado en departamento
+arbol_departamento <- rpart(Departamento ~
+                Clase+
+                TipodeCarne+
+                SexoSubclase,
+               data = data_ganado, method = "class")
 
-# Crear el gráfico del árbol de decisión
-rpart.plot(arbol1, type = 1, extra = 0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", main = "Predicción de departamento", cex = 1)
+rpart.plot(arbol_departamento, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de departamento", cex = 1)
 
-#Predicción de departamento
+#Puesta a prueba del modelo de árbol de decisión departamento
+predicción_departamento1  <- data.frame(
+  Clase=c(1),
+  TipodeCarne=c(2),
+  SexoSubclase=c(5)
+)
+
+resultado_departamento1 <- predict(arbol_departamento,predicción_departamento1, type="class")
+resultado_departamento1
+
+predicción_departamento2  <- data.frame(
+  Clase=c(2),
+  TipodeCarne=c(1),
+  SexoSubclase=c(8)
+)
+
+resultado_departamento2 <- predict(arbol_departamento,predicción_departamento2, type="class")
+resultado_departamento2
+
+predicción_departamento3  <- data.frame(
+  Clase=c(4),
+  TipodeCarne=c(1),
+  SexoSubclase=c(8)
+)
+
+resultado_departamento3 <- predict(arbol_departamento,predicción_departamento3, type="class")
+resultado_departamento3
+
+predicción_departamento4  <- data.frame(
+  Clase=c(3),
+  TipodeCarne=c(1),
+  SexoSubclase=c(9)
+)
+
+resultado_departamento4 <- predict(arbol_departamento,predicción_departamento4, type="class")
+resultado_departamento4
+
+predicción_departamento5  <- data.frame(
+  Clase=c(1),
+  TipodeCarne=c(1),
+  SexoSubclase=c(5)
+)
+
+resultado_departamento5 <- predict(arbol_departamento,predicción_departamento5, type="class")
+resultado_departamento5
 
 
 
