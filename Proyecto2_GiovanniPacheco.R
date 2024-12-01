@@ -208,3 +208,35 @@ predicción_ClaseCarne3 <- data.frame(
 
 resultado_ClaseCarne3 <- predict(arbol_ClaseCarne,predicción_ClaseCarne3, type="class")
 resultado_ClaseCarne3
+##Desarrollo del árbol de decisión basado en mes
+arbol_Mes <- rpart(Mes ~
+                  TipodeCarne+
+                  Departamento,
+                  data = data_ganado, method = "class")
+
+rpart.plot(arbol_Mes, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de Mes", cex = 1)
+
+predicción_Mes1 <- data.frame(
+  TipodeCarne=c(1),
+  Departamento=c(1)
+)
+
+resultado_Mes1 <- predict(arbol_Mes,predicción_Mes1, type="class")
+resultado_Mes1
+
+predicción_Mes2 <- data.frame(
+  TipodeCarne=c(2),
+  Departamento=c(19)
+)
+
+resultado_Mes2 <- predict(arbol_Mes,predicción_Mes2, type="class")
+resultado_Mes2
+
+predicción_Mes3 <- data.frame(
+  TipodeCarne=c(1),
+  Departamento=c(9)
+)
+
+resultado_Mes3 <- predict(arbol_Mes,predicción_Mes3, type="class")
+resultado_Mes3
