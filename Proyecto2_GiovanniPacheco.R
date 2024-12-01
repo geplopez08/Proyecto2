@@ -171,3 +171,40 @@ predicción_municipio2 <- data.frame(
 
 resultado_municipio2 <- predict(arbol_municipio,predicción_municipio2, type="class")
 resultado_municipio2
+
+##Desarrollo del árbol de decisión basado en Clase de carne
+arbol_ClaseCarne <- rpart(Clase ~
+                          TipodeCarne+
+                          Departamento+
+                          SexoSubclase,
+                         data = data_ganado, method = "class")
+
+rpart.plot(arbol_ClaseCarne, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de Clase de carne", cex = 1)
+
+predicción_ClaseCarne1 <- data.frame(
+  TipodeCarne=c(1),
+  Departamento=c(10),
+  SexoSubclase=c(5)
+)
+
+resultado_ClaseCarne1 <- predict(arbol_ClaseCarne,predicción_ClaseCarne1, type="class")
+resultado_ClaseCarne1
+
+predicción_ClaseCarne2 <- data.frame(
+  TipodeCarne=c(2),
+  Departamento=c(13),
+  SexoSubclase=c(4)
+)
+
+resultado_ClaseCarne2 <- predict(arbol_ClaseCarne,predicción_ClaseCarne2, type="class")
+resultado_ClaseCarne2
+
+predicción_ClaseCarne3 <- data.frame(
+  TipodeCarne=c(1),
+  Departamento=c(7),
+  SexoSubclase=c(9)
+)
+
+resultado_ClaseCarne3 <- predict(arbol_ClaseCarne,predicción_ClaseCarne3, type="class")
+resultado_ClaseCarne3
