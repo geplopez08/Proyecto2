@@ -137,6 +137,37 @@ predicción_departamento5  <- data.frame(
 resultado_departamento5 <- predict(arbol_departamento,predicción_departamento5, type="class")
 resultado_departamento5
 
+##Desarrollo del árbol de decisión basado en municipio
+#Factorizar variables
+data_ganado$Municipio <- factor(data_ganado$Municipio)
+data_ganado$Año <- factor(data_ganado$Año)
+data_ganado$Mes <- factor(data_ganado$Mes)
 
+#Generar un subset con los datos de 2022
+subset_ganado_2022 <- subset(data_ganado, Año=="2022")
+View(subset_ganado_2022)
 
+#Creación del árbol de decisión
+arbol_municipio <- rpart(Municipio ~
+                          Clase+
+                          SexoSubclase,
+                          data = subset_ganado_2022, method = "class")
 
+rpart.plot(arbol_municipio, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de municipio", cex = 1)
+
+predicción_municipio1 <- data.frame(
+  Clase=c(1),
+  SexoSubclase=c(5)
+)
+
+resultado_municipio1 <- predict(arbol_municipio,predicción_municipio1, type="class")
+resultado_municipio1
+
+predicción_municipio2 <- data.frame(
+  Clase=c(3),
+  SexoSubclase=c(8)
+)
+
+resultado_municipio2 <- predict(arbol_municipio,predicción_municipio2, type="class")
+resultado_municipio2
