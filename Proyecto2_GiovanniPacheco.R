@@ -240,3 +240,114 @@ predicción_Mes3 <- data.frame(
 
 resultado_Mes3 <- predict(arbol_Mes,predicción_Mes3, type="class")
 resultado_Mes3
+
+##Aplicación de bosques aleatorios (Random forests)
+#Instalación de paquetes y librerias
+install.packages("randomForest")
+library(randomForest)
+
+#Generación de un dataframe con columnas con valores categóricos
+subset_bosque <- data_ganado[, c("TipodeCarne","Mes","Departamento","Clase","SexoSubclase")]
+View(subset_bosque)
+
+#Factorización de departamento
+subset_bosque$Departamento <- factor(subset_bosque$Departamento)
+
+#Generación de semilla y aleatoriedad de los datos
+set.seed(100)
+subset_bosque <- subset_bosque[sample(1:nrow(subset_bosque)),]
+
+index <-sample(1:nrow(subset_bosque), 0.8*nrow(subset_bosque))
+
+train <- subset_bosque[index,]
+test <- subset_bosque[-index,]
+
+#Generación del bosque aleatorio en función de departamento
+bosque_departamento <- randomForest(Departamento ~ 
+                        Clase+
+                        TipodeCarne+
+                        SexoSubclase,
+                       data = train,
+                       ntree = 1000,
+                       mtry = 10
+)
+
+prediccion_bosque_departamento <- predict(bosque_departamento, test)
+prediccion_bosque_departamento
+
+matriz <- table(test$Departamento, prediccion_bosque_departamento)
+matriz
+
+plot(bosque_departamento)
+
+predict_departamento1 <- data.frame(
+  Clase=2,
+  TipodeCarne=1,
+  SexoSubclase=8
+)
+
+predict_bosque_departamento1 <- predict(bosque_departamento, predict_departamento1)
+predict_bosque_departamento1
+
+predict_departamento2 <- data.frame(
+  Clase=1,
+  TipodeCarne=1,
+  SexoSubclase=6
+)
+
+predict_bosque_departamento2 <- predict(bosque_departamento, predict_departamento2)
+predict_bosque_departamento2
+
+predict_departamento3 <- data.frame(
+  Clase=3,
+  TipodeCarne=1,
+  SexoSubclase=9
+)
+
+predict_bosque_departamento3 <- predict(bosque_departamento, predict_departamento3)
+predict_bosque_departamento3
+
+predict_departamento4 <- data.frame(
+  Clase=4,
+  TipodeCarne=1,
+  SexoSubclase=8
+)
+
+predict_bosque_departamento4 <- predict(bosque_departamento, predict_departamento4)
+predict_bosque_departamento4
+
+predict_departamento5 <- data.frame(
+  Clase=1,
+  TipodeCarne=2,
+  SexoSubclase=5
+)
+
+predict_bosque_departamento5 <- predict(bosque_departamento, predict_departamento5)
+predict_bosque_departamento5
+
+predict_departamento6 <- data.frame(
+  Clase=2,
+  TipodeCarne=2,
+  SexoSubclase=9
+)
+
+predict_bosque_departamento6 <- predict(bosque_departamento, predict_departamento6)
+predict_bosque_departamento6
+
+predict_departamento7 <- data.frame(
+  Clase=3,
+  TipodeCarne=2,
+  SexoSubclase=9
+)
+
+predict_bosque_departamento7 <- predict(bosque_departamento, predict_departamento7)
+predict_bosque_departamento7
+
+predict_departamento8 <- data.frame(
+  Clase=4,
+  TipodeCarne=2,
+  SexoSubclase=8
+)
+
+predict_bosque_departamento8 <- predict(bosque_departamento, predict_departamento8)
+predict_bosque_departamento8
