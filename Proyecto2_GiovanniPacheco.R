@@ -153,6 +153,17 @@ arbol_municipio <- rpart(Municipio ~
                           SexoSubclase,
                           data = subset_ganado_2022, method = "class")
 
+
+rpart.plot(arbol_municipio, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de municipio", cex = 1)
+
+#Creación del árbol de decisión forzando a 3 niveles y minsplit de 5
+arbol_municipio <- rpart(Municipio ~
+                           Clase+
+                           SexoSubclase,
+                         data = subset_ganado_2022, 
+               control = rpart.control(minsplit = 5, cp = 0, maxdepth = 3))
+
 rpart.plot(arbol_municipio, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
            main ="Predicción de municipio", cex = 1)
 
@@ -171,6 +182,22 @@ predicción_municipio2 <- data.frame(
 
 resultado_municipio2 <- predict(arbol_municipio,predicción_municipio2, type="class")
 resultado_municipio2
+
+predicción_municipio3 <- data.frame(
+  Clase=c(1),
+  SexoSubclase=c(5)
+)
+
+resultado_municipio3 <- predict(arbol_municipio,predicción_municipio3, type="class")
+resultado_municipio3
+
+predicción_municipio4 <- data.frame(
+  Clase=c(4),
+  SexoSubclase=c(9)
+)
+
+resultado_municipio4 <- predict(arbol_municipio,predicción_municipio4, type="class")
+resultado_municipio4
 
 ##Desarrollo del árbol de decisión basado en Clase de carne
 arbol_ClaseCarne <- rpart(Clase ~
@@ -208,11 +235,22 @@ predicción_ClaseCarne3 <- data.frame(
 
 resultado_ClaseCarne3 <- predict(arbol_ClaseCarne,predicción_ClaseCarne3, type="class")
 resultado_ClaseCarne3
+
 ##Desarrollo del árbol de decisión basado en mes
 arbol_Mes <- rpart(Mes ~
                   TipodeCarne+
                   Departamento,
                   data = data_ganado, method = "class")
+
+rpart.plot(arbol_Mes, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
+           main ="Predicción de Mes", cex = 1)
+
+##Desarrollo del árbol de decisión basado en mes con ajustes en niveles y minsplit
+arbol_Mes <- rpart(Mes ~
+                 TipodeCarne+
+                 Departamento,
+               data = data_ganado, 
+               control = rpart.control(minsplit = 5, cp = 0, maxdepth = 3))
 
 rpart.plot(arbol_Mes, type=2, extra=0, under = TRUE, fallen.leaves = TRUE, box.palette = "BuGn", 
            main ="Predicción de Mes", cex = 1)
@@ -250,7 +288,7 @@ library(randomForest)
 subset_bosque <- data_ganado[, c("TipodeCarne","Mes","Departamento","Clase","SexoSubclase")]
 View(subset_bosque)
 
-#Factorización de departamento
+#Factorización de variables
 subset_bosque$Departamento <- factor(subset_bosque$Departamento)
 
 #Generación de semilla y aleatoriedad de los datos
@@ -268,8 +306,7 @@ bosque_departamento <- randomForest(Departamento ~
                         TipodeCarne+
                         SexoSubclase,
                        data = train,
-                       ntree = 1000,
-                       mtry = 10
+                       ntree = 1000
 )
 
 prediccion_bosque_departamento <- predict(bosque_departamento, test)
@@ -351,3 +388,69 @@ predict_departamento8 <- data.frame(
 
 predict_bosque_departamento8 <- predict(bosque_departamento, predict_departamento8)
 predict_bosque_departamento8
+
+View(subset_bosque)
+
+##Bosque aleatorio en función de Clase de carne
+#Generación de un dataframe con columnas con valores categóricos
+subset_bosque <- data_ganado[, c("TipodeCarne","Mes","Departamento","Clase","SexoSubclase")]
+
+#Factorización de variables
+subset_bosque$Clase <- factor(subset_bosque$Clase)
+
+#Generación de semilla y aleatoriedad de los datos
+set.seed(100)
+subset_bosque <- subset_bosque[sample(1:nrow(subset_bosque)),]
+
+index <-sample(1:nrow(subset_bosque), 0.8*nrow(subset_bosque))
+
+train <- subset_bosque[index,]
+test <- subset_bosque[-index,]
+
+#Generación del bosque aleatorio en función de Clase
+bosque_Clasecarne <- randomForest(Clase ~ 
+                                  Departamento+
+                                  TipodeCarne,
+                                  data = train,
+                                  ntree = 100
+)
+
+prediccion_clasecarne<- predict(bosque_Clasecarne, test)
+prediccion_clasecarne
+
+matriz <- table(test$Clase, prediccion_clasecarne)
+matriz
+
+plot(bosque_Clasecarne)
+
+predict_clasecarne1 <- data.frame(
+  Departamento=10,
+  TipodeCarne=1
+)
+
+predict_bosque_clasecarne1 <- predict(bosque_Clasecarne, predict_clasecarne1)
+predict_bosque_clasecarne1
+
+predict_clasecarne2 <- data.frame(
+  Departamento=13,
+  TipodeCarne=2
+)
+
+predict_bosque_clasecarne2 <- predict(bosque_Clasecarne, predict_clasecarne2)
+predict_bosque_clasecarne2
+
+predict_clasecarne3 <- data.frame(
+  Departamento=7,
+  TipodeCarne=1
+)
+
+predict_bosque_clasecarne3 <- predict(bosque_Clasecarne, predict_clasecarne3)
+predict_bosque_clasecarne3
+
+predict_clasecarne4 <- data.frame(
+  Departamento=22,
+  TipodeCarne=2
+)
+
+predict_bosque_clasecarne4 <- predict(bosque_Clasecarne, predict_clasecarne4)
+predict_bosque_clasecarne4
