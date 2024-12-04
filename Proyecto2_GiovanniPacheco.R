@@ -454,3 +454,18 @@ predict_clasecarne4 <- data.frame(
 
 predict_bosque_clasecarne4 <- predict(bosque_Clasecarne, predict_clasecarne4)
 predict_bosque_clasecarne4
+
+##Generación de red neuronal para predicción
+#Creación de csv a partir de los cuales se generaron los árboles de decisión
+#Árbol de predicción de departamento
+View(data_ganado)
+
+#Establecer directorio y guardar el csv
+setwd("C:\\Users\\geplo\\OneDrive\\Escritorio\\MAESTRIA\\Ciclo 4\\Minería\\Proyecto 2")
+write.csv(data_ganado, "red_neuronal_data_ganado.csv", row.names = FALSE)
+
+#Árbol de predicción de municipio
+View(subset_ganado_2022)
+
+#Guardar el csv
+write.csv(subset_ganado_2022, "red_neuronal_subset_ganado_2022.csv", row.names = FALSE)
