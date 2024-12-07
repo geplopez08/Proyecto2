@@ -463,9 +463,3 @@ View(data_ganado)
 #Establecer directorio y guardar el csv
 setwd("C:\\Users\\geplo\\OneDrive\\Escritorio\\MAESTRIA\\Ciclo 4\\Minería\\Proyecto 2")
 write.csv(data_ganado, "red_neuronal_data_ganado.csv", row.names = FALSE)
-
-#Árbol de predicción de municipio
-View(subset_ganado_2022)
-
-#Guardar el csv
-write.csv(subset_ganado_2022, "red_neuronal_subset_ganado_2022.csv", row.names = FALSE)
